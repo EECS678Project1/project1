@@ -13,10 +13,17 @@ Quash::~Quash()
 
 void Quash::run()
 {
-  while(true)
+  bool exitShell = false;
+  string input = "jsjd";
+  while(exitShell == false)
   {
-    string input;
     cout<<">";
     cin>>input;
+      if(input == "exit")
+      {
+        exitShell = true;
+      }
   }
+
+
 }
