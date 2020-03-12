@@ -19,5 +19,4 @@ void Quash::run()
     cout<<">";
     cin>>input;
   }
-
 }
