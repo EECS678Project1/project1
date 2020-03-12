@@ -12,6 +12,7 @@ public:
 Quash();
 ~Quash();
 void run();//add path
+void launch();
 
 };
 #endif
