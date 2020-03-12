@@ -1,6 +1,6 @@
-prog: main.o
+quash: main.o
 
-	g++ -g -std=c++11 -Wall main.o -o prog
+	g++ -g -std=c++11 -Wall main.o -o quash
 
 
 main.o: main.cpp
@@ -9,4 +9,4 @@ main.o: main.cpp
 
 
 clean:
-	rm *.o prog
+	rm *.o quash
