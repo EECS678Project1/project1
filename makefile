@@ -1,7 +1,5 @@
-prog: main.o Quash.o
-
-	g++ -g -std=c++11 -Wall main.o Quash.o -o prog
-
+quash: main.o Quash.o
+	g++ -g -std=c++11 -Wall main.o Quash.o -o quash
 
 main.o: main.cpp Quash.h
 
@@ -14,4 +12,4 @@ Quash.o: Quash.cpp Quash.h
 
 
 clean:
-	rm *.o prog
+	rm *.o quash
