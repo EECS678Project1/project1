@@ -1,6 +1,8 @@
 #include <string>
 #include <iostream>
 
+using namespace std;
+
 #ifndef QUASH_H
 #define QUASH_H
 
@@ -12,7 +14,7 @@ public:
 Quash();
 ~Quash();
 void run();//add path
-void launch();
+void launch(const char* args);
 
 };
 #endif

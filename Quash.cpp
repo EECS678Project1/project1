@@ -1,6 +1,12 @@
 #include "Quash.h"
-#include<unistd.h>
-#include<stdio.h>
+#include <string>
+#include <iostream>
+#include <unistd.h>
+#include <stdio.h>
+#include <sys/types.h>
+#include <sys/wait.h>
+
+
 using namespace std;
 
 Quash::Quash()
@@ -21,17 +27,19 @@ void Quash::run()
   {
     cout<<">";
     cin>>input;
-    //launch();
-      if(input == "exit")
-      {
-        exitShell = true;
-      }
+    const char* c = input.c_str();
+    if(input == "exit")
+    {
+      exitShell = true;
+    }
+    launch(c);
+
   }
 
 
 }
 
-void Quash::launch()
+void Quash::launch(const char* args)
 {
 
   pid_t pid, wpid;
@@ -41,7 +49,7 @@ void Quash::launch()
   if (pid == 0)
   {
     // Child process
-    execvp("./HelloWorld",NULL);
+    execvp(args,NULL);
   }
   else if (pid < 0)
   {
@@ -51,5 +59,6 @@ void Quash::launch()
   else
   {
       wait(NULL);
+
   }
 }
