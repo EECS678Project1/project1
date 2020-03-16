@@ -5,8 +5,15 @@ Comment
 
 #include <iostream>
 
-int main()
+int main(int argc, char* argv[])
 {
+	if(argc<2)
+	{
+	std::cout<<"Not right"<<std::endl;
+	}else
+	{
+	std::cout<<argv[1];
 	std::cout<<"Hello World"<<std::endl;
 	std::cout<<"Hello World\n";
+	}
 }

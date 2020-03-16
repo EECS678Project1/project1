@@ -5,6 +5,7 @@
 #include <stdio.h>
 #include <sys/types.h>
 #include <sys/wait.h>
+#include <vector>
 
 
 using namespace std;
@@ -26,30 +27,45 @@ void Quash::run()
   while(exitShell == false)
   {
     cout<<">";
-    cin>>input;
-    const char* c = input.c_str();
+    getline(cin,input);
     if(input == "exit")
     {
       exitShell = true;
+      return;
     }
-    launch(c);
+    string* const test = splitArguments(input);
+    for(int i=0;i<5;i++)
+    {
+      cout<<test[i];
+    }
+
+
+    launch(test);
 
   }
 
 
 }
 
-void Quash::launch(const char* args)
+void Quash::launch(string* const args)
 {
-
+//const char* c = args->c_str();
+cout<<"in launch"<<endl;
   pid_t pid, wpid;
   int status;
-  //char const * args[] = {"./Exercise1",NULL};
+
   pid = fork();
   if (pid == 0)
   {
     // Child process
-    execvp(args,NULL);
+    cout<<args[0]<<endl;
+    cout<<args[1]<<endl;
+    char** const newArgs = new char*[args->size()];
+    for(int i=0;i<args->size();i++)
+    {
+      const newArgs[i] = args[i].c_str();
+    }
+    execvp(newArgs[0], newArgs);
   }
   else if (pid < 0)
   {
@@ -61,4 +77,33 @@ void Quash::launch(const char* args)
       wait(NULL);
 
   }
+}
+
+string* Quash::splitArguments(string line)
+{
+  cout<<"here"<<endl;
+  cout<<line.length()<<endl;
+  vector<string> myVector;
+  string argument = "";
+  for(int i=0;i<line.length();i++)
+  {
+    cout<<"hi"<<endl;
+    if(line[i] != ' ')
+    {
+      argument = argument + line[i];
+    }else
+    {
+      myVector.push_back(argument);
+      argument = "";
+    }
+  }
+  myVector.push_back(argument);
+  string* args = new string[myVector.size()];
+  cout<<myVector.at(0)<<endl;
+  for(int i=0;i<myVector.size();i++)
+  {
+    args[i] = myVector.at(i);
+    cout<<args[i]<<endl;
+  }
+  return args;
 }

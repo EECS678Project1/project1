@@ -14,7 +14,8 @@ public:
 Quash();
 ~Quash();
 void run();//add path
-void launch(const char* args);
+void launch(string* args);
+string* splitArguments(string line);
 
 };
 #endif
