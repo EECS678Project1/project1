@@ -6,6 +6,8 @@
 #include <sys/types.h>
 #include <sys/wait.h>
 #include <vector>
+#include<cstdlib>
+#include<stdlib.h>
 
 
 using namespace std;
@@ -36,6 +38,17 @@ void Quash::run()
       return;
     }
     vector<string> test = splitArguments(input);
+    if(test[0]=="export")
+    {
+      if(test[1] == "PATH")
+      {
+        setPaths(test[2]);
+      }
+      else
+      {
+        setHomes(test[2]);
+      }
+    }
     launch(test);
 
   }
@@ -93,4 +106,18 @@ vector<string> Quash::splitArguments(string line)
   }
   myVector.push_back(argument);
   return myVector;
+}
+
+void Quash::setPaths(string mPath)
+{
+  int e = _putenv_s("PATH",mPath.c_str());
+  if(e)
+  {
+    std::cout<<"\nDidn't work";
+  }
+}
+
+void Quash::setHomes(string mHome)
+{
+return;
 }
