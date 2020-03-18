@@ -58,13 +58,7 @@ char** newArgs = new char*[args.size()+1];
     }
     newArgs[args.size()] = NULL;
 
-    if(args.size() == 1) //for no args
-    {
-      execvp(newArgs[0], NULL);
-    }else //with args
-    {
       execvp(newArgs[0], newArgs);
-    }
 
   }
   else if (pid < 0)
