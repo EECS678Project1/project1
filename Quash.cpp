@@ -23,7 +23,7 @@ Quash::~Quash()
 void Quash::run()
 {
   bool exitShell = false;
-  string input = "jsjd";
+  string input = "";
   while(exitShell == false)
   {
     cout<<">";
@@ -33,13 +33,7 @@ void Quash::run()
       exitShell = true;
       return;
     }
-    string* const test = splitArguments(input);
-    for(int i=0;i<5;i++)
-    {
-      cout<<test[i];
-    }
-
-
+    vector<string> test = splitArguments(input);
     launch(test);
 
   }
@@ -47,10 +41,10 @@ void Quash::run()
 
 }
 
-void Quash::launch(string* const args)
+void Quash::launch(vector<string> args)
 {
-//const char* c = args->c_str();
-cout<<"in launch"<<endl;
+char** newArgs = new char*[args.size()+1];
+
   pid_t pid, wpid;
   int status;
 
@@ -58,14 +52,20 @@ cout<<"in launch"<<endl;
   if (pid == 0)
   {
     // Child process
-    cout<<args[0]<<endl;
-    cout<<args[1]<<endl;
-    char** const newArgs = new char*[args->size()];
-    for(int i=0;i<args->size();i++)
+    for(int i=0;i<args.size();i++)
     {
-      const newArgs[i] = args[i].c_str();
+      newArgs[i] = const_cast<char*>(args[i].c_str());
     }
-    execvp(newArgs[0], newArgs);
+    newArgs[args.size()] = NULL;
+
+    if(args.size() == 1) //for no args
+    {
+      execvp(newArgs[0], NULL);
+    }else //with args
+    {
+      execvp(newArgs[0], newArgs);
+    }
+
   }
   else if (pid < 0)
   {
@@ -74,20 +74,18 @@ cout<<"in launch"<<endl;
   }
   else
   {
+    //Parent process
       wait(NULL);
 
   }
 }
 
-string* Quash::splitArguments(string line)
+vector<string> Quash::splitArguments(string line)
 {
-  cout<<"here"<<endl;
-  cout<<line.length()<<endl;
   vector<string> myVector;
   string argument = "";
   for(int i=0;i<line.length();i++)
   {
-    cout<<"hi"<<endl;
     if(line[i] != ' ')
     {
       argument = argument + line[i];
@@ -98,12 +96,5 @@ string* Quash::splitArguments(string line)
     }
   }
   myVector.push_back(argument);
-  string* args = new string[myVector.size()];
-  cout<<myVector.at(0)<<endl;
-  for(int i=0;i<myVector.size();i++)
-  {
-    args[i] = myVector.at(i);
-    cout<<args[i]<<endl;
-  }
-  return args;
+  return myVector;
 }

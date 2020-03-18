@@ -1,5 +1,6 @@
 #include <string>
 #include <iostream>
+#include <vector>
 
 using namespace std;
 
@@ -14,8 +15,8 @@ public:
 Quash();
 ~Quash();
 void run();//add path
-void launch(string* args);
-string* splitArguments(string line);
+void launch(vector<string> args);
+vector<string> splitArguments(string line);
 
 };
 #endif
