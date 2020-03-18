@@ -38,18 +38,14 @@ void Quash::run()
       return;
     }
     vector<string> test = splitArguments(input);
-    if(test[0]=="export")
+    if(test[0]=="set")
     {
-      if(test[1] == "PATH")
-      {
-        setPaths(test[2]);
-      }
-      else
-      {
-        setHomes(test[2]);
-      }
+        setPaths(test[1]);
+    }else
+    {
+      launch(test);
     }
-    launch(test);
+
 
   }
 
@@ -110,14 +106,15 @@ vector<string> Quash::splitArguments(string line)
 
 void Quash::setPaths(string mPath)
 {
-  int e = _putenv_s("PATH",mPath.c_str());
+  int e = putenv(const_cast<char*>(mPath.c_str()));
   if(e)
   {
     std::cout<<"\nDidn't work";
-  }
-}
+  }else
+  {
+    cout<<"it works"<<endl;
+    cout<<getenv("PATH")<<endl;
+    cout<<getenv("HOME")<<endl;
 
-void Quash::setHomes(string mHome)
-{
-return;
+  }
 }
