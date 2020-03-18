@@ -12,7 +12,8 @@ using namespace std;
 
 Quash::Quash()
 {
-
+m_path = getenv ("PATH");
+m_home =getenv ("HOME");
 }
 
 Quash::~Quash()
@@ -22,13 +23,14 @@ Quash::~Quash()
 
 void Quash::run()
 {
+  cout<<m_home<<endl;
   bool exitShell = false;
   string input = "";
   while(exitShell == false)
   {
     cout<<">";
     getline(cin,input);
-    if(input == "exit")
+    if(input == "exit" || input == "quit")
     {
       exitShell = true;
       return;

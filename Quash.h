@@ -10,7 +10,8 @@ using namespace std;
 class Quash
 {
 private:
-
+string m_path;
+string m_home;
 public:
 Quash();
 ~Quash();
