@@ -16,6 +16,7 @@ Quash::Quash()
 {
 m_path = getenv ("PATH");
 m_home =getenv ("HOME");
+m_dir = getenv("PWD");
 }
 
 Quash::~Quash()
@@ -116,5 +117,17 @@ void Quash::setPaths(string mPath)
     cout<<getenv("PATH")<<endl;
     cout<<getenv("HOME")<<endl;
 
+  }
+}
+
+void Quash::changeDir(string mdir)
+{
+  char* dir_name = const_cast<char*>(mdir.c_str());
+  if(chdir(dir_name))
+  {
+    cout<<getenv("PWD");
+  }else
+  {
+    cout<<"\nError";
   }
 }
