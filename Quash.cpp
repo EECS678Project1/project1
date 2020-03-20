@@ -41,7 +41,17 @@ void Quash::run()
     vector<string> test = splitArguments(input);
     if(test[0]=="set")
     {
-        setPaths(test[1]);
+      setPaths(test[1]);
+    }else if(test[0]=="cd")
+    {
+      if(test.size() == 1)
+      {
+        changeDir(m_home);
+      }else
+      {
+        changeDir(test[1]);
+      }
+
     }else
     {
       launch(test);
