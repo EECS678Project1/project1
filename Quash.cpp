@@ -1,5 +1,5 @@
 #include "Quash.h"
-#include <string>
+#include <string.h>
 #include <iostream>
 #include <unistd.h>
 #include <stdio.h>
@@ -46,10 +46,10 @@ void Quash::run()
     {
       if(test.size() == 1)
       {
-        changeDir(m_home);
+        changeDir(m_home, true); //if home sending true
       }else
       {
-        changeDir(test[1]);
+        changeDir(test[1], false);
       }
 
     }else
@@ -130,19 +130,39 @@ void Quash::setPaths(string mPath)
   }
 }
 
-void Quash::changeDir(string mdir)
+void Quash::changeDir(string mdir, bool homeOrNot)
 {
-  char* name_of_dir = const_cast<char*>(mdir.c_str());
-  char* cur_dir = getenv("PWD");
-  string temp1 = "/";
-  char* backslash= const_cast<char*>(temp1.c_str());
-  char* dir_name = strcat(cur_dir,backslash);
-  char * to = strcat(dir_name,name_of_dir);
-  if(chdir(to)==0)
+      cout<<"before change: "<<getenv("PWD")<<endl;
+  if(homeOrNot)
   {
-    cout<<getenv("PWD");
+    const char* name_of_dir = (mdir.c_str());
+    cout<<"name of dir:"<<name_of_dir<<endl;
+    if(chdir(name_of_dir)==0)
+    {
+      char* dir = getcwd(NULL, 1024);
+      setenv("PWD",dir,1);
+      cout<<dir<<endl;
+    }else
+    {
+      cout<<"\nError"<<endl;
+    }
   }else
   {
-    cout<<"\nError"<<endl;
+    char* name_of_dir = const_cast<char*>(mdir.c_str());
+    char* cur_dir = getenv("PWD");
+    string temp1 = "/";
+    char* backslash= const_cast<char*>(temp1.c_str());
+    char* dir_name = strcat(cur_dir,backslash);
+    const char * to = strcat(dir_name,name_of_dir);
+    if(chdir(to)==0)
+    {
+      char* dir = getcwd(NULL, 1024);
+      setenv("PWD",dir,1);
+      cout<<dir<<endl;
+    }else
+    {
+      cout<<"\nError"<<endl;
+    }
   }
+
 }
