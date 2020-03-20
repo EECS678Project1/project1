@@ -26,7 +26,7 @@ Quash::~Quash()
 
 void Quash::run()
 {
-  cout<<m_home<<endl;
+  cout<<"home: "<<m_home<<endl;
   bool exitShell = false;
   string input = "";
   while(exitShell == false)
@@ -132,12 +132,13 @@ void Quash::setPaths(string mPath)
 
 void Quash::changeDir(string mdir)
 {
-  char* dir_name = const_cast<char*>(mdir.c_str());
-  if(chdir(dir_name))
+  const char* dir_name = (mdir.c_str());
+  cout<<"before change"<<getenv("PWD")<<endl;
+  if(chdir(dir_name) == 0)
   {
     cout<<getenv("PWD");
   }else
   {
-    cout<<"\nError";
+    cout<<"\nError"<<endl;
   }
 }
