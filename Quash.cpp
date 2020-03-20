@@ -132,9 +132,13 @@ void Quash::setPaths(string mPath)
 
 void Quash::changeDir(string mdir)
 {
-  const char* dir_name = (mdir.c_str());
-  cout<<"before change"<<getenv("PWD")<<endl;
-  if(chdir(dir_name) == 0)
+  char* name_of_dir = const_cast<char*>(mdir.c_str());
+  char* cur_dir = getenv("PWD");
+  string temp1 = "/";
+  char* backslash= const_cast<char*>(temp1.c_str());
+  char* dir_name = strcat(cur_dir,backslash);
+  char * to = strcat(dir_name,name_of_dir);
+  if(chdir(to)==0)
   {
     cout<<getenv("PWD");
   }else
