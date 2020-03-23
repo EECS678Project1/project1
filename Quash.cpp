@@ -66,6 +66,14 @@ void Quash::run()
 
 void Quash::launch(vector<string> args)
 {
+  bool isBack = false;
+  if(args.at(args.size()-1) == "&")
+  {
+  cout<<"it is &"<<endl;
+  args.pop_back();
+  isBack = true;
+  }
+
 char** newArgs = new char*[args.size()+1];
 
   pid_t pid, wpid;
@@ -80,8 +88,9 @@ char** newArgs = new char*[args.size()+1];
       newArgs[i] = const_cast<char*>(args[i].c_str());
     }
     newArgs[args.size()] = NULL;
-
+    cout<<endl<<getpid()<<" running in the background"<<endl;
       execvp(newArgs[0], newArgs);
+    cout<<"finished"<<endl;
 
   }
   else if (pid < 0)
@@ -92,7 +101,11 @@ char** newArgs = new char*[args.size()+1];
   else
   {
     //Parent process
+    if(!isBack)
+    {
       wait(NULL);
+    }
+
 
   }
 }
