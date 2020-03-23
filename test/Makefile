@@ -1,6 +1,6 @@
-Helloworld: main.o
-		g++ main.o -o HelloWorld
+t: main.o
+		g++ main.o -o t
 main.o: main.cpp
 		g++ -c main.cpp
 clean:
-		rm *.o HelloWorld
+		rm *.o t

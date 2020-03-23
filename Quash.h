@@ -1,6 +1,10 @@
 #include <string>
 #include <iostream>
 #include <vector>
+#include <unistd.h>
+#include <wait.h>
+#include <signal.h>
+#include <sys/types.h>
 
 using namespace std;
 
@@ -13,6 +17,7 @@ private:
 string m_path;
 string m_home;
 string m_dir;
+static Quash instance;
 public:
 Quash();
 ~Quash();
@@ -21,6 +26,7 @@ void launch(vector<string> args);
 vector<string> splitArguments(string line);
 void setPaths(string mPath);
 void changeDir(string mdir);
+static void childSignalHandler(int signum);
 
 };
 #endif
