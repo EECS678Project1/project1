@@ -68,26 +68,28 @@ void Quash::run()
 void Quash::launch(vector<string> args)
 {
   bool isBack = false;
-  bool isjobs = false;
+  bool isJob = false;
+  //for background
   if(args.at(args.size()-1) == "&")
   {
-  cout<<"it is &"<<endl;
   args.pop_back();
   isBack = true;
   }
 
+  //for jobs
   if(args.at(0) == "jobs")
   {
-   isjobs = true;
+    isJob = true;
   }
 
-char** newArgs = new char*[args.size()+1];
+
+  char** newArgs = new char*[args.size()+1];
 
   pid_t pid, wpid;
 
 
 
-signal(SIGCHLD, Quash::childSignalHandler);
+  signal(SIGCHLD, Quash::childSignalHandler);
 
   pid = fork();
   if (pid == 0)
@@ -107,7 +109,7 @@ signal(SIGCHLD, Quash::childSignalHandler);
       execvp(newArgs[0], newArgs);
     }else
     {
-      cout<<endl<<getpid()<<" running in the foreground"<<endl;
+      //cout<<endl<<getpid()<<" running in the foreground"<<endl;
         execvp(newArgs[0], newArgs);
     }
 
@@ -119,18 +121,29 @@ signal(SIGCHLD, Quash::childSignalHandler);
   }
   else
   {
+    cout<<"in parent"<<endl;
     //Parent process
+
+    if(isJob)
+    {
+      cout<<"in jobbbbbb"<<endl;
+      cout<<"child pid: "<<pid<<endl;
+    }
+
     if(!isBack)
     {
       wait(NULL);
     }
-    if(isjobs)
+    if(isJob)
     {
       for(int i = 0;i<pids.size();i++)
       {
         cout<<pids.at(i)<<endl;
       }
     }
+
+
+
 
   }
 }
@@ -141,8 +154,8 @@ int status;
 int p = waitpid(-1, &status, WNOHANG);
   if(p>0)
   {
-    cout<<"got it"<<endl;
-    cout<<p<<endl;
+
+    cout<<"Process "<<p<<" terminated"<<endl;
   }
 
 }
