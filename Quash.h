@@ -27,7 +27,7 @@ vector<string> splitArguments(string line);
 void setPaths(string mPath);
 void changeDir(string mdir);
 static void childSignalHandler(int signum);
-vector<int> pids;
+static vector<int> pids;
 
 };
 #endif
