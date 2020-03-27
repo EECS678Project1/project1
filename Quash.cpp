@@ -123,9 +123,13 @@ signal(SIGCHLD, Quash::childSignalHandler);
 void Quash::childSignalHandler(int sig)
 {
 int status;
-cout<<"got it"<<endl;
 int p = waitpid(-1, &status, WNOHANG);
-cout<<p<<endl;
+  if(p>0)
+  {
+    cout<<"got it"<<endl;
+    cout<<p<<endl;
+  }
+
 }
 
 vector<string> Quash::splitArguments(string line)
