@@ -66,10 +66,21 @@ void Quash::run()
 
 void Quash::launch(vector<string> args)
 {
+  bool isBack = false;
+  if(args.at(args.size()-1) == "&")
+  {
+  cout<<"it is &"<<endl;
+  args.pop_back();
+  isBack = true;
+  }
+
 char** newArgs = new char*[args.size()+1];
 
   pid_t pid, wpid;
-  int status;
+
+
+
+signal(SIGCHLD, Quash::childSignalHandler);
 
   pid = fork();
   if (pid == 0)
@@ -81,7 +92,15 @@ char** newArgs = new char*[args.size()+1];
     }
     newArgs[args.size()] = NULL;
 
-      execvp(newArgs[0], newArgs);
+    if(isBack)
+    {
+      cout<<endl<<getpid()<<" running in the background"<<endl;
+        execvp(newArgs[0], newArgs);
+    }else
+    {
+      cout<<endl<<getpid()<<" running in the foreground"<<endl;
+        execvp(newArgs[0], newArgs);
+    }
 
   }
   else if (pid < 0)
@@ -92,9 +111,21 @@ char** newArgs = new char*[args.size()+1];
   else
   {
     //Parent process
+    if(!isBack)
+    {
       wait(NULL);
+    }
+
 
   }
+}
+
+void Quash::childSignalHandler(int sig)
+{
+int status;
+cout<<"got it"<<endl;
+int p = waitpid(-1, &status, WNOHANG);
+cout<<p<<endl;
 }
 
 vector<string> Quash::splitArguments(string line)
