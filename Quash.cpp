@@ -103,7 +103,7 @@ void Quash::launch(vector<string> args)
 
     if(isBack)
     {
-      pids.push_back(getpid());
+
       cout<<endl<<getpid()<<" running in the background"<<endl;
 
       execvp(newArgs[0], newArgs);
@@ -121,26 +121,25 @@ void Quash::launch(vector<string> args)
   }
   else
   {
-    cout<<"in parent"<<endl;
     //Parent process
-
     if(isJob)
     {
-      cout<<"in jobbbbbb"<<endl;
-      cout<<"child pid: "<<pid<<endl;
-    }
-
-    if(!isBack)
+      //cout<<"in jobbbbbb"<<endl;
+      //cout<<"child pid: "<<pid<<endl;
+      for(int i = 0;i<pids.size();i++)
+      {
+        //cout<<"stuff in vector"<<endl;
+        cout<<pids.at(i)<<endl;
+      }
+    }else if(isBack)
+    {
+      pids.push_back(pid);
+    }else
     {
       wait(NULL);
     }
-    if(isJob)
-    {
-      for(int i = 0;i<pids.size();i++)
-      {
-        cout<<pids.at(i)<<endl;
-      }
-    }
+
+
 
 
 
@@ -152,10 +151,11 @@ void Quash::childSignalHandler(int sig)
 {
 int status;
 int p = waitpid(-1, &status, WNOHANG);
+//cout<<"p is: "<<p<<endl;
   if(p>0)
   {
-
     cout<<"Process "<<p<<" terminated"<<endl;
+    //Quash::pids.push_back(1);
   }
 
 }
