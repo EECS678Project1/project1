@@ -7,6 +7,7 @@ Comment
 
 int main(int argc, char* argv[])
 {
+std::cout<<"args:"<<argc<<std::endl;
 	if(argc<2)
 	{
 	std::cout<<"Not right"<<std::endl;
