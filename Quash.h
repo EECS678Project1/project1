@@ -2,7 +2,7 @@
 #include <iostream>
 #include <vector>
 #include <unistd.h>
-#include <wait.h>
+#include <sys/wait.h>
 #include <signal.h>
 #include <sys/types.h>
 
@@ -27,6 +27,7 @@ vector<string> splitArguments(string line);
 void setPaths(string mPath);
 void changeDir(string mdir);
 static void childSignalHandler(int signum);
+vector<int> pids;
 
 };
 #endif

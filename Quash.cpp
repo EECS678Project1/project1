@@ -43,7 +43,8 @@ void Quash::run()
     if(test[0]=="set")
     {
       setPaths(test[1]);
-    }else if(test[0]=="cd")
+    }
+    else if(test[0]=="cd")
     {
       if(test.size() == 1)
       {
@@ -67,11 +68,17 @@ void Quash::run()
 void Quash::launch(vector<string> args)
 {
   bool isBack = false;
+  bool isjobs = false;
   if(args.at(args.size()-1) == "&")
   {
   cout<<"it is &"<<endl;
   args.pop_back();
   isBack = true;
+  }
+
+  if(args.at(0) == "jobs")
+  {
+   isjobs = true;
   }
 
 char** newArgs = new char*[args.size()+1];
@@ -94,8 +101,10 @@ signal(SIGCHLD, Quash::childSignalHandler);
 
     if(isBack)
     {
+      pids.push_back(getpid());
       cout<<endl<<getpid()<<" running in the background"<<endl;
-        execvp(newArgs[0], newArgs);
+
+      execvp(newArgs[0], newArgs);
     }else
     {
       cout<<endl<<getpid()<<" running in the foreground"<<endl;
@@ -115,7 +124,13 @@ signal(SIGCHLD, Quash::childSignalHandler);
     {
       wait(NULL);
     }
-
+    if(isjobs)
+    {
+      for(int i = 0;i<pids.size();i++)
+      {
+        cout<<pids.at(i)<<endl;
+      }
+    }
 
   }
 }
