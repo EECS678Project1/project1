@@ -13,7 +13,7 @@
 using namespace std;
 
 vector<int> Quash::pids;
-
+vector<string> Quash::commands;
 
 Quash::Quash()
 {
@@ -77,6 +77,7 @@ void Quash::launch(vector<string> args)
   {
   args.pop_back();
   isBack = true;
+  commands.push_back(args.at(0));
   }
 
   //for jobs
@@ -138,11 +139,11 @@ void Quash::launch(vector<string> args)
       for(int i = 0;i<pids.size();i++)
       {
         //cout<<"stuff in vector"<<endl;
-        if(pids.at(i)<-1)
+        if(pids.at(i)>-1)
         {
           int id = i+1;
           cout<<"["<<id<<"]"<<" ";
-          cout<<pids.at(i)<<endl;
+          cout<<pids.at(i)<<" "<<commands.at(i)<<endl;
           //also print command later
         }
 
@@ -170,11 +171,11 @@ int p = waitpid(-1, &status, WNOHANG);
       if(pids.at(i)==p)
       {
         int id = i+1;
-        cout<<"["<<id<<"]"<<" ";
+        cout<<"["<<id<<"]"<<" "<<p<<" finished "<<commands.at(i)<<endl;
         pids.at(i)= -1;
       }
     }
-    cout<<p<<" finished"<<endl;
+    //cout<<p<<" finished"<<endl;
     //Quash::pids.push_back(1);
   }
 

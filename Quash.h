@@ -28,6 +28,7 @@ void setPaths(string mPath);
 void changeDir(string mdir);
 static void childSignalHandler(int signum);
 static vector<int> pids;
+static vector<string> commands;
 
 };
 #endif
