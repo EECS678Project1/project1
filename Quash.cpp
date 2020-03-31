@@ -11,9 +11,13 @@
 
 
 using namespace std;
+<<<<<<< HEAD
 
 vector<int> Quash::pids;
 
+=======
+std::vector<int> Quash::pids;
+>>>>>>> 53984af4a0543acbba798c3a2eebf2bfe1845244
 Quash::Quash()
 {
 m_path = getenv ("PATH");
@@ -105,8 +109,16 @@ void Quash::launch(vector<string> args)
 
     if(isBack)
     {
+      //pids.push_back(getpid());
+      /*for(int i =0;i<pids.size();i++)
+      {
+        if(pids.at(i)==getpid())
+        {
+          cout<<"["<<i<<"]"<<" ";
+        }
+      }*/
 
-      cout<<endl<<getpid()<<" running in the background"<<endl;
+      cout<<getpid()<<" running in the background"<<endl;
 
       execvp(newArgs[0], newArgs);
     }else
@@ -141,11 +153,6 @@ void Quash::launch(vector<string> args)
       wait(NULL);
     }
 
-
-
-
-
-
   }
 }
 
@@ -156,9 +163,17 @@ int p = waitpid(-1, &status, WNOHANG);
 //cout<<"p is: "<<p<<endl;
   if(p>0)
   {
-    
-    cout<<"Process "<<p<<" terminated"<<endl;
-    pids.at(0) = -1;
+    for(int i =0;i<pids.size();i++)
+    {
+      if(pids.at(i)==p)
+      {
+        int id = i+1;
+        cout<<"["<<id<<"]"<<" ";
+        pids.at(i)= -1;
+      }
+    }
+    cout<<p<<" finished"<<endl;
+    //Quash::pids.push_back(1);
   }
 
 }
