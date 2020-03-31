@@ -11,13 +11,10 @@
 
 
 using namespace std;
-<<<<<<< HEAD
 
 vector<int> Quash::pids;
 
-=======
-std::vector<int> Quash::pids;
->>>>>>> 53984af4a0543acbba798c3a2eebf2bfe1845244
+
 Quash::Quash()
 {
 m_path = getenv ("PATH");
@@ -138,12 +135,17 @@ void Quash::launch(vector<string> args)
     //Parent process
     if(isJob)
     {
-      //cout<<"in jobbbbbb"<<endl;
-      //cout<<"child pid: "<<pid<<endl;
       for(int i = 0;i<pids.size();i++)
       {
         //cout<<"stuff in vector"<<endl;
-        cout<<pids.at(i)<<endl;
+        if(pids.at(i)<-1)
+        {
+          int id = i+1;
+          cout<<"["<<id<<"]"<<" ";
+          cout<<pids.at(i)<<endl;
+          //also print command later
+        }
+
       }
     }else if(isBack)
     {
