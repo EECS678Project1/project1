@@ -56,7 +56,14 @@ void Quash::run()
       {
         changeDir(test[1]);
       }
-
+    }else if (test.size() >= 3 && (test[test.size()-2]=="<" || test[test.size()-2]==">"))
+    {
+      bool readIt = false;
+      if(test[test.size()-2]=="<")
+      {
+        readIt = true;
+      }
+      redirect(readIt, test);
     }else
     {
       launch(test);
@@ -146,8 +153,8 @@ void Quash::launch(vector<string> args)
           cout<<pids.at(i)<<" "<<commands.at(i)<<endl;
           //also print command later
         }
-
       }
+
     }else if(isBack)
     {
       pids.push_back(pid);
@@ -163,16 +170,16 @@ void Quash::childSignalHandler(int sig)
 {
 int status;
 int p = waitpid(-1, &status, WNOHANG);
-//cout<<"p is: "<<p<<endl;
   if(p>0)
   {
     for(int i =0;i<pids.size();i++)
     {
+      cout<<"p is "<<p<<endl;
       if(pids.at(i)==p)
       {
         int id = i+1;
         cout<<"["<<id<<"]"<<" "<<p<<" finished "<<commands.at(i)<<endl;
-        pids.at(i)= -1;
+        pids[i]= -1;
       }
     }
     //cout<<p<<" finished"<<endl;
@@ -225,6 +232,35 @@ void Quash::changeDir(string mdir)
     }else
     {
       cout<<"No such file or directory"<<endl;
+    }
+
+}
+
+void Quash::redirect(bool readIt, vector<string> test)
+{
+  vector<string> temp;
+  string fileName = test[test.size()-1];
+  const char* fileNameStar = const_cast<char*>(fileName.c_str());
+  for(int i = 0; i < test.size()-2; i++)
+  {
+    temp.push_back(test.at(i));
+  }
+    if(readIt)
+    {
+      int o = dup(fileno(stdin));
+      freopen(fileNameStar,"r",stdin);
+      launch(temp);
+      dup2(o,fileno(stdin));
+      close(o);
+      cout<<"done reading"<<endl;
+    }else
+    {
+      int o = dup(fileno(stdout));
+      freopen(fileNameStar,"w",stdout);
+      launch(temp);
+      dup2(o,fileno(stdout));
+      close(o);
+      cout<<"done writing"<<endl;
     }
 
 }
