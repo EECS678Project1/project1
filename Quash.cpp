@@ -12,6 +12,8 @@
 
 using namespace std;
 
+vector<int> Quash::pids;
+
 Quash::Quash()
 {
 m_path = getenv ("PATH");
@@ -154,8 +156,9 @@ int p = waitpid(-1, &status, WNOHANG);
 //cout<<"p is: "<<p<<endl;
   if(p>0)
   {
+    
     cout<<"Process "<<p<<" terminated"<<endl;
-    //Quash::pids.push_back(1);
+    pids.at(0) = -1;
   }
 
 }
