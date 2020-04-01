@@ -25,6 +25,7 @@ Quash::Quash()
 m_path = getenv ("PATH");
 m_home =getenv ("HOME");
 m_dir = getenv("PWD");
+
 }
 
 Quash::~Quash()
@@ -148,7 +149,10 @@ void Quash::launch(vector<string> args)
   pid_t pid, wpid;
 
   signal(SIGCHLD, Quash::childSignalHandler);
-
+  if(isBack)
+  {
+    count++;
+  }
   pid = fork();
   if (pid == 0)
   {
@@ -161,7 +165,8 @@ void Quash::launch(vector<string> args)
 
     if(isBack)
     {
-      cout<<endl<<getpid()<<" running in the background"<<endl;
+
+      cout<<"["<<count<<"]"<<getpid()<<" running in the background"<<endl;
 
       execvp(newArgs[0], newArgs);
     }else
