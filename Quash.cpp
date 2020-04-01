@@ -166,7 +166,7 @@ void Quash::launch(vector<string> args)
     if(isBack)
     {
 
-      cout<<"["<<count<<"]"<<getpid()<<" running in the background"<<endl;
+      cout<<"["<<count<<"] "<<getpid()<<" running in the background"<<endl;
 
       execvp(newArgs[0], newArgs);
     }else
