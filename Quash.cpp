@@ -26,7 +26,7 @@ Quash::~Quash()
 {
 
 }
-
+//.............................................................................
 void Quash::run()
 {
   cout<<"home: "<<m_home<<endl;
@@ -75,6 +75,7 @@ void Quash::run()
 
 }
 
+//.............................................................................
 void Quash::launch(vector<string> args)
 {
   bool isBack = false;
@@ -93,12 +94,9 @@ void Quash::launch(vector<string> args)
     isJob = true;
   }
 
-
   char** newArgs = new char*[args.size()+1];
 
   pid_t pid, wpid;
-
-
 
   signal(SIGCHLD, Quash::childSignalHandler);
 
@@ -166,6 +164,7 @@ void Quash::launch(vector<string> args)
   }
 }
 
+//.............................................................................
 void Quash::childSignalHandler(int sig)
 {
 int status;
@@ -188,6 +187,7 @@ int p = waitpid(-1, &status, WNOHANG);
 
 }
 
+//.............................................................................
 vector<string> Quash::splitArguments(string line)
 {
   vector<string> myVector;
@@ -207,6 +207,7 @@ vector<string> Quash::splitArguments(string line)
   return myVector;
 }
 
+//.............................................................................
 void Quash::setPaths(string mPath)
 {
   int e = putenv(const_cast<char*>(mPath.c_str()));
@@ -222,6 +223,7 @@ void Quash::setPaths(string mPath)
   }
 }
 
+//.............................................................................
 void Quash::changeDir(string mdir)
 {
     const char* name_of_dir = (mdir.c_str());
@@ -236,6 +238,7 @@ void Quash::changeDir(string mdir)
 
 }
 
+//.............................................................................
 void Quash::redirect(bool readIt, vector<string> test)
 {
   vector<string> temp;
