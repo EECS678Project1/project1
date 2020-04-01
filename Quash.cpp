@@ -8,6 +8,11 @@
 #include <vector>
 #include<cstdlib>
 #include<stdlib.h>
+#include <limits.h>
+#include <dirent.h>
+#include <sys/stat.h>
+
+
 
 
 using namespace std;
@@ -30,8 +35,12 @@ Quash::~Quash()
 void Quash::run()
 {
   cout<<"home: "<<m_home<<endl;
+  int num;
   bool exitShell = false;
+  bool ispipe = false;
   string input = "";
+  vector<string> command1;
+  vector<string> command2;
   while(exitShell == false)
   {
     cout<<getenv("PWD");
@@ -43,7 +52,35 @@ void Quash::run()
       return;
     }
     vector<string> test = splitArguments(input);
-    if(test[0]=="set")
+    for(int j=0;j<test.size();j++)
+    {
+      if(test.at(j)=="|")
+      {
+        ispipe = true;
+        num = j;
+        break;
+      }
+      //command1.push_back(test.at(j));
+    }
+    if(ispipe)
+    {
+    for(int j=0;j<test.size();j++)
+    {
+      if(test.at(j)=="|")
+      {
+        num = j;
+        break;
+      }
+      command1.push_back(test.at(j));
+    }
+      for(int i = num+1;i<test.size();i++)
+      {
+        command2.push_back(test.at(i));
+      }
+      pipeCommand(command1,command2);
+      ispipe = false;
+    }
+    else if(test[0]=="set")
     {
       setPaths(test[1]);
     }
@@ -64,7 +101,8 @@ void Quash::run()
         readIt = true;
       }
       redirect(readIt, test);
-    }else
+    }
+    else
     {
       launch(test);
     }
@@ -80,6 +118,7 @@ void Quash::launch(vector<string> args)
 {
   bool isBack = false;
   bool isJob = false;
+  bool ispipe = false;
   //for background
   if(args.at(args.size()-1) == "&")
   {
@@ -265,5 +304,36 @@ void Quash::redirect(bool readIt, vector<string> test)
       close(o);
       cout<<"done writing"<<endl;
     }
+
+}
+
+void Quash::pipeCommand(vector<string> command1,vector<string> command2)
+{
+  int pipe_fd[2];
+  pipe(pipe_fd);
+  pid_t p1,p2;
+
+  p1 = fork();
+  if ( p1 == 0 )
+  {
+     /* Redirect output of process into pipe */
+     dup2( pipe_fd[1], STDOUT_FILENO );
+     launch(command1);
+     close(pipe_fd[0]);
+     close(pipe_fd[1]);
+     exit(0);
+     //execvp(newArgs1[0], newArgs1);
+   }
+
+   p2 = fork();
+  if (p2 == 0) {
+     /* Redirect input of process out of pipe */
+     dup2(pipe_fd[0], STDIN_FILENO);
+     launch(command2);
+     close(pipe_fd[0]);
+     close(pipe_fd[1]);
+     exit(0);
+}
+/* Main process */
 
 }
