@@ -39,10 +39,10 @@ void Quash::run()
   bool exitShell = false;
   bool ispipe = false;
   string input = "";
-  vector<string> command1;
-  vector<string> command2;
   while(exitShell == false)
   {
+    vector<string> command1;
+    vector<string> command2;
     cout<<getenv("PWD");
     cout<<">";
     getline(cin,input);
@@ -64,15 +64,15 @@ void Quash::run()
     }
     if(ispipe)
     {
-    for(int j=0;j<test.size();j++)
-    {
-      if(test.at(j)=="|")
+      for(int j=0;j<test.size();j++)
       {
-        num = j;
-        break;
+        if(test.at(j)=="|")
+        {
+          num = j;
+          break;
+        }
+        command1.push_back(test.at(j));
       }
-      command1.push_back(test.at(j));
-    }
       for(int i = num+1;i<test.size();i++)
       {
         command2.push_back(test.at(i));
@@ -318,8 +318,8 @@ void Quash::pipeCommand(vector<string> command1,vector<string> command2)
   {
      /* Redirect output of process into pipe */
      dup2( pipe_fd[1], STDOUT_FILENO );
-     launch(command1);
      close(pipe_fd[0]);
+     launch(command1);
      close(pipe_fd[1]);
      exit(0);
      //execvp(newArgs1[0], newArgs1);
@@ -329,11 +329,14 @@ void Quash::pipeCommand(vector<string> command1,vector<string> command2)
   if (p2 == 0) {
      /* Redirect input of process out of pipe */
      dup2(pipe_fd[0], STDIN_FILENO);
+     close(pipe_fd[1]);
      launch(command2);
      close(pipe_fd[0]);
-     close(pipe_fd[1]);
      exit(0);
-}
+   }
 /* Main process */
+close(pipe_fd[0]);
+close(pipe_fd[1]);
+wait(NULL);
 
 }
