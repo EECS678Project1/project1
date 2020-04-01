@@ -30,6 +30,7 @@ static void childSignalHandler(int signum);
 static vector<int> pids;
 static vector<string> commands;
 void redirect(bool readIt, vector<string> test);
+void pipeCommand(vector<string> command1,vector<string> command2);
 
 };
 #endif
