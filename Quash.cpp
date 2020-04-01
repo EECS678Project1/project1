@@ -39,12 +39,12 @@ void Quash::run()
   bool exitShell = false;
   bool ispipe = false;
   string input = "";
+  cout<<getenv("PWD");
+  cout<<">";
   while(exitShell == false)
   {
     vector<string> command1;
     vector<string> command2;
-    cout<<getenv("PWD");
-    cout<<">";
     getline(cin,input);
     if(input == "exit" || input == "quit")
     {
@@ -83,15 +83,21 @@ void Quash::run()
     else if(test[0]=="set")
     {
       setPaths(test[1]);
+      cout<<getenv("PWD");
+      cout<<">";
     }
     else if(test[0]=="cd")
     {
       if(test.size() == 1)
       {
         changeDir(m_home); //if home sending true
+        cout<<getenv("PWD");
+        cout<<">";
       }else
       {
         changeDir(test[1]);
+        cout<<getenv("PWD");
+        cout<<">";
       }
     }else if (test.size() >= 3 && (test[test.size()-2]=="<" || test[test.size()-2]==">"))
     {
@@ -101,10 +107,14 @@ void Quash::run()
         readIt = true;
       }
       redirect(readIt, test);
+      cout<<getenv("PWD");
+      cout<<">";
     }
     else
     {
       launch(test);
+      cout<<getenv("PWD");
+      cout<<">";
     }
 
 
@@ -151,16 +161,7 @@ void Quash::launch(vector<string> args)
 
     if(isBack)
     {
-      //pids.push_back(getpid());
-      /*for(int i =0;i<pids.size();i++)
-      {
-        if(pids.at(i)==getpid())
-        {
-          cout<<"["<<i<<"]"<<" ";
-        }
-      }*/
-
-      cout<<getpid()<<" running in the background"<<endl;
+      cout<<endl<<getpid()<<" running in the background"<<endl;
 
       execvp(newArgs[0], newArgs);
     }else
@@ -188,7 +189,6 @@ void Quash::launch(vector<string> args)
           int id = i+1;
           cout<<"["<<id<<"]"<<" ";
           cout<<pids.at(i)<<" "<<commands.at(i)<<endl;
-          //also print command later
         }
       }
 
@@ -212,16 +212,16 @@ int p = waitpid(-1, &status, WNOHANG);
   {
     for(int i =0;i<pids.size();i++)
     {
-      cout<<"p is "<<p<<endl;
+      cout<<endl;
       if(pids.at(i)==p)
       {
         int id = i+1;
         cout<<"["<<id<<"]"<<" "<<p<<" finished "<<commands.at(i)<<endl;
         pids[i]= -1;
+
+
       }
     }
-    //cout<<p<<" finished"<<endl;
-    //Quash::pids.push_back(1);
   }
 
 }
@@ -255,10 +255,7 @@ void Quash::setPaths(string mPath)
     std::cout<<"\nDidn't work";
   }else
   {
-    cout<<"it works"<<endl;
-    cout<<getenv("PATH")<<endl;
-    cout<<getenv("HOME")<<endl;
-
+    cout<<"Environment set correctly"<<endl;
   }
 }
 
@@ -274,7 +271,6 @@ void Quash::changeDir(string mdir)
     {
       cout<<"No such file or directory"<<endl;
     }
-
 }
 
 //.............................................................................
@@ -294,7 +290,7 @@ void Quash::redirect(bool readIt, vector<string> test)
       launch(temp);
       dup2(o,fileno(stdin));
       close(o);
-      cout<<"done reading"<<endl;
+      cout<<"Done reading"<<endl;
     }else
     {
       int o = dup(fileno(stdout));
@@ -302,7 +298,7 @@ void Quash::redirect(bool readIt, vector<string> test)
       launch(temp);
       dup2(o,fileno(stdout));
       close(o);
-      cout<<"done writing"<<endl;
+      cout<<"Done writing"<<endl;
     }
 
 }
@@ -332,11 +328,12 @@ void Quash::pipeCommand(vector<string> command1,vector<string> command2)
      close(pipe_fd[1]);
      launch(command2);
      close(pipe_fd[0]);
+     cout<<getenv("PWD");
+     cout<<">";
      exit(0);
    }
 /* Main process */
 close(pipe_fd[0]);
 close(pipe_fd[1]);
 wait(NULL);
-
 }
