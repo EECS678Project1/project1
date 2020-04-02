@@ -37,9 +37,11 @@ void Quash::run()
 {
   cout<<"home: "<<m_home<<endl;
   int num;
+  int counter = 0;
   bool exitShell = false;
   bool ispipe = false;
   string input = "";
+  string previnput = "";
   cout<<getenv("PWD");
   cout<<">";
   while(exitShell == false)
@@ -47,6 +49,24 @@ void Quash::run()
     vector<string> command1;
     vector<string> command2;
     getline(cin,input);
+    if(previnput == input)
+    {
+      counter++;
+    }
+    else
+    {
+      counter = 0;
+      previnput = input;
+
+    }
+    if(counter == 5)
+    {
+      exitShell = true;
+      break;
+    }
+
+
+
     if(input == "exit" || input == "quit")
     {
       exitShell = true;
