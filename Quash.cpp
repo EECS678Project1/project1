@@ -254,7 +254,27 @@ vector<string> Quash::splitArguments(string line)
 //.............................................................................
 void Quash::setPaths(string mPath)
 {
-  int e = putenv(const_cast<char*>(mPath.c_str()));
+  //int e = putenv(const_cast<char*>(mPath.c_str()));
+  string envName = "";
+  string envValue = "";
+  bool part1 = true;
+  for(int i=0;i<mPath.length();i++)
+  {
+    if(mPath[i]!='=' && part1 == true)
+    {
+      envName = envName + mPath[i];
+    }else
+    {
+      part1 = false;
+      if(mPath[i]!='=')
+      {
+        envValue = envValue + mPath[i];
+      }
+
+    }
+  }
+
+  int e = setenv(const_cast<char*>(envName.c_str()),const_cast<char*>(envValue.c_str()),1);
   if(e)
   {
     std::cout<<"\nDidn't work";
