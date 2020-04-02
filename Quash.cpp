@@ -188,11 +188,17 @@ void Quash::launch(vector<string> args)
 
       cout<<"["<<count<<"] "<<getpid()<<" running in the background"<<endl;
 
-      execvp(newArgs[0], newArgs);
+      if (execvp(newArgs[0], newArgs)<0)
+      {
+        cout<<"\nExecutable not found\n";
+      }
     }else
     {
       //cout<<endl<<getpid()<<" running in the foreground"<<endl;
-        execvp(newArgs[0], newArgs);
+      if (execvp(newArgs[0], newArgs)<0)
+      {
+        cout<<"\nExecutable not found\n";
+      }
     }
 
   }
