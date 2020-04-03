@@ -11,6 +11,8 @@
 #include <limits.h>
 #include <dirent.h>
 #include <sys/stat.h>
+#include<iterator>
+#include<algorithm>
 
 
 
@@ -131,7 +133,12 @@ void Quash::run()
       cout<<getenv("PWD");
       cout<<">";
     }
-    else
+    else if (test[0]=="jobs")
+    {
+      printJobs();
+      cout<<getenv("PWD");
+      cout<<">";
+    }else
     {
       launch(test);
       cout<<getenv("PWD");
@@ -148,7 +155,6 @@ void Quash::run()
 void Quash::launch(vector<string> args)
 {
   bool isBack = false;
-  bool isJob = false;
   bool ispipe = false;
   //for background
   if(args.at(args.size()-1) == "&")
@@ -156,12 +162,6 @@ void Quash::launch(vector<string> args)
   args.pop_back();
   isBack = true;
   commands.push_back(args.at(0));
-  }
-
-  //for jobs
-  if(args.at(0) == "jobs")
-  {
-    isJob = true;
   }
 
   char** newArgs = new char*[args.size()+1];
@@ -190,7 +190,7 @@ void Quash::launch(vector<string> args)
 
       if (execvp(newArgs[0], newArgs)<0)
       {
-        cout<<"\nExecutable not found\n";
+        cout<<"\nCant find executable to run in background\n";
       }
     }else
     {
@@ -210,20 +210,7 @@ void Quash::launch(vector<string> args)
   else
   {
     //Parent process
-    if(isJob)
-    {
-      for(int i = 0;i<pids.size();i++)
-      {
-        //cout<<"stuff in vector"<<endl;
-        if(pids.at(i)>-1)
-        {
-          int id = i+1;
-          cout<<"["<<id<<"]"<<" ";
-          cout<<pids.at(i)<<" "<<commands.at(i)<<endl;
-        }
-      }
-
-    }else if(isBack)
+    if(isBack)
     {
       pids.push_back(pid);
     }else
@@ -248,7 +235,9 @@ int p = waitpid(-1, &status, WNOHANG);
       {
         int id = i+1;
         cout<<"["<<id<<"]"<<" "<<p<<" finished "<<commands.at(i)<<endl;
-        pids[i]= -1;
+        //pids.at(i)= -100;
+        pids.at(i) = -100;
+        pids[i] = -100;
 
 
       }
@@ -387,4 +376,19 @@ void Quash::pipeCommand(vector<string> command1,vector<string> command2)
 close(pipe_fd[0]);
 close(pipe_fd[1]);
 wait(NULL);
+}
+
+
+void Quash::printJobs()
+{
+    for(int i = 0;i<pids.size();i++)
+    {
+      if(pids.at(i)!=(-100))
+      {
+        int id = i+1;
+        cout<<"["<<id<<"]"<<" ";
+        cout<<pids.at(i)<<" "<<commands.at(i)<<endl;
+      }
+    }
+
 }
