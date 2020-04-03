@@ -186,7 +186,9 @@ void Quash::launch(vector<string> args)
     if(isBack)
     {
 
-      cout<<"["<<count<<"] "<<getpid()<<" running in the background"<<endl;
+      cout<<endl<<"["<<count<<"] "<<getpid()<<" running in the background"<<endl<<getenv("PWD")<<">"<<endl;
+      //cout<<getenv("PWD");
+      //cout<<">";
 
       if (execvp(newArgs[0], newArgs)<0)
       {
@@ -234,10 +236,9 @@ int p = waitpid(-1, &status, WNOHANG);
       if(pids.at(i)==p)
       {
         int id = i+1;
-        cout<<"["<<id<<"]"<<" "<<p<<" finished "<<commands.at(i)<<endl;
+        cout<<"["<<id<<"]"<<" "<<p<<" finished "<<commands.at(i)<<endl<<getenv("PWD")<<">"<<endl;
         //pids.at(i)= -100;
         pids.at(i) = -100;
-        pids[i] = -100;
 
 
       }
