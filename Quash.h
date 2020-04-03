@@ -33,6 +33,8 @@ void redirect(bool readIt, vector<string> test);
 void pipeCommand(vector<string> command1,vector<string> command2);
 void printJobs();
 int count = 0;
+void killprocess(string signum, string jobid);
+
 
 };
 #endif
