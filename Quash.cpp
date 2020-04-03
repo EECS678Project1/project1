@@ -138,7 +138,12 @@ void Quash::run()
       printJobs();
       cout<<getenv("PWD");
       cout<<">";
-    }else
+    }
+    else if(test[0]=="kill")
+    {
+      killprocess(test[1],test[2]);
+    }
+    else
     {
       launch(test);
       cout<<getenv("PWD");
@@ -392,4 +397,17 @@ void Quash::printJobs()
       }
     }
 
+}
+
+void Quash::killprocess(string signum, string jobid)
+{
+  int pid = 0;
+  for(int i=0;i<pids.size();i++)
+  {
+    if(i==(stoi(jobid)-1))
+    {
+      pid = pids.at(i);
+    }
+  }
+  kill(pid,SIGKILL);
 }
