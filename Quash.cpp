@@ -37,7 +37,6 @@ Quash::~Quash()
 //.............................................................................
 void Quash::run()
 {
-  cout<<"home: "<<m_home<<endl;
   int num;
   int counter = 0;
   bool exitShell = false;
